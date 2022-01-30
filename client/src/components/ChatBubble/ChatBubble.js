@@ -1,79 +1,59 @@
-import styled from "styled-components";
-
-const ChatBubbleWrapperSelf = styled.div`
-width: 100%;
-height: auto;
-padding: 20px;
-color: #fff;
-box-sizing: border-box;
-display: flex;
-justify-content: flex-end;
-`;
-
-const ChatBubbleWrapperOthers = styled.div`
-width: 100%;
-height: auto;
-padding: 20px;
-color: #fff;
-box-sizing: border-box;
-display: flex;
-`;
-
-const ChatBubbleInner = styled.div`
-display: flex;
-flex-direction: column;
-background: #9F3548;
-width: fit-content;
-height: fit-content;
-padding: 10px;
-border-radius: 10px;
-`;
-
-const UsernameLabel = styled.span`
-font-size: 20px;
-font-weight:bold;
-`; 
-
-const ChatMessage = styled.span`  
-font-size: 25px;
-line-height: 20px;
-`; 
-
-const ChatTime = styled.span`  
-font-size: 20px;
-align-self: end;
-`;
-
 function ChatBubble(props) {
+
+    const chatDisplay = () => {
+        if(props.type === "connect") {
+            return connectAnnouncement();
+        } else if(props.type === "disconnect") {
+            return disconnectAnnouncement();
+        } else if(props.type === "chat") {
+            if (props.sender === "self") {
+                return selfChatBubble();
+            } else {
+                return otherChatBubble();
+            }
+        }
+    }
+
+    const connectAnnouncement = () => {
+        return(
+            <span className="self-center text-stone-400 text-xl font-bold">
+                {props.username} has joined the room
+            </span>
+        );
+    }
+
+    const disconnectAnnouncement = () => {
+        return(
+            <span className="self-center text-stone-400 text-xl font-bold">
+                {props.username} has disconnected from the room
+            </span>
+        );
+    }
 
     const selfChatBubble = () => {
         return(
-            <ChatBubbleWrapperSelf>
-                <ChatBubbleInner>
-                    <UsernameLabel>{props.username}</UsernameLabel>
-                    <ChatMessage>{props.message}</ChatMessage>
-                    <ChatTime>{props.time}</ChatTime>
-                </ChatBubbleInner>
-            </ChatBubbleWrapperSelf>
+            <div className="flex flex-col self-end p-2 mb-2 rounded-xl text-white bg-purple-800 h-fit max-w-xs">
+                <span className='font-bold'>{props.username}</span>
+                <span className='text-2xl leading-5'>{props.message}</span>
+                <span className='self-end'>{props.time}</span>
+            </div>
         );
     }
 
     const otherChatBubble = () => {
         return(
-            <ChatBubbleWrapperOthers>
-                <ChatBubbleInner>
-                    <UsernameLabel>{props.username}</UsernameLabel>
-                    <ChatMessage>{props.message}</ChatMessage>
-                    <ChatTime>{props.time}</ChatTime>
-                </ChatBubbleInner>
-            </ChatBubbleWrapperOthers>
+            <div className="flex flex-col p-2 mb-2 rounded-xl text-purple-800 border border-purple-800 h-fit w-fit max-w-xs">
+                <span className='font-bold'>{props.username}</span>
+                <span className='text-2xl leading-5'>{props.message}</span>
+                <span className='self-end'>{props.time}</span>
+            </div>
         );
     }
 
     return(
-        <div>
-            {props.type === "self" ? selfChatBubble() : otherChatBubble()}
-        </div>
+        <div className="flex flex-col">
+            {chatDisplay()}
+        </div>        
     );
 }
 
