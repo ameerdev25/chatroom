@@ -12,9 +12,15 @@ var io = require("socket.io")(http, {
 //Connect to socket
 io.on("connection", function(socket) {
     console.log("A user is connected");
+    let username;
+    let room;
+
     //Listening to "join room"
-    socket.on("join room", (data, callback) => {        
+    socket.on("join room", (data, callback) => {  
+        username = data.username;
+        room = data.room;      
         socket.join(data.room);
+        io.to(data.room).emit("announcement", {username: data.username, room: data.room});
         console.log(data.username + " joined " + data.room + " room");
         callback({
             status: 'ok'
@@ -29,6 +35,7 @@ io.on("connection", function(socket) {
 
     //Listening to "disconnect"
     socket.on("disconnect", (data) => {
+        io.to(room).emit("userDisconnect", {username:username, room:room});
         console.log("A user disconnected");
     });
 });
