@@ -1,38 +1,65 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { io } from "socket.io-client";
 import ChatBubble from '../ChatBubble/ChatBubble';
 import { MdSend } from 'react-icons/md';
 import { BsEmojiSmileFill } from 'react-icons/bs'
 import EmojiPicker from 'emoji-picker-react';
+import * as CONSTANTS from '../../utility/Constants';
 
-function Chatroom(props) {
+function Chatroom() {
   const location = useLocation();
 
   const navigate = useNavigate();
 
-  const [username] = useState(location.state.username);
-  const [room] = useState(location.state.room);
+  const [socket, setSocket] = useState("");
+  const [username, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [chatData, setChatData] = useState([]);
   const [emojiPickerShow, setEmojiPickerShow] = useState(false);
 
+  const { id } = useParams();
+
   const scrollPoint = useRef();
 
-  useEffect(() => {    
-    getSocketData(props.socket);
-  }, []);
+  useEffect(() => {
+    const socketio = io(CONSTANTS.ENDPOINT);
+    setSocket(socketio);
+    connectToRoom(socketio);
+    getSocketData(socketio);
+  }, []);  
+
+  const connectToRoom = (socket) => {
+    if (!location.state) {
+      // User join from link, so there is no location username passed
+      let newUsername = prompt("Key in username");
+      if(newUsername === "") {
+        newUsername = prompt("Username cannot be empty!");
+      } else if (newUsername) {
+        socket.emit("join room", {username: newUsername, roomid: id});
+        setUsername(newUsername);
+      } else {
+        navigate('/', {replace: false});
+      }
+    } else {   
+      // User create the room   
+      setUsername(location.state.username);
+      socket.emit("join room", {username: location.state.username, roomid: id});
+    }
+       
+  }
 
   const sendMessage = (event) => {
     event.preventDefault();
     if (message !== "") {
       var time = new Date();      
-      props.socket.emit('chat message', {username: username, room: room, message: message, time: time.toLocaleString([], {hour: '2-digit', minute: '2-digit', hour12:true})});
+      socket.emit('chat message', {username: username, room: id, message: message, time: time.toLocaleString([], {hour: '2-digit', minute: '2-digit', hour12:true})});
       setMessage("");
     }
   }
 
   const getSocketData = (socket) => {  
-    if(props.socket === undefined) {
+    if(socket === undefined) {
       navigate('/', {replace: false});
     } else {
         socket.on("announcement", (data) => {

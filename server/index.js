@@ -16,15 +16,12 @@ io.on("connection", function(socket) {
     let room;
 
     //Listening to "join room"
-    socket.on("join room", (data, callback) => {  
+    socket.on("join room", (data) => {  
         username = data.username;
-        room = data.room;      
-        socket.join(data.room);
-        io.to(data.room).emit("announcement", {username: data.username, room: data.room});
-        console.log(data.username + " joined " + data.room + " room");
-        callback({
-            status: 'ok'
-        });
+        room = data.roomid;      
+        socket.join(data.roomid);
+        io.to(data.roomid).emit("announcement", {username: data.username, room: data.roomid});
+        console.log(data.username + " joined " + data.roomid + " room");
     });
 
     //Listening to "chat message"
