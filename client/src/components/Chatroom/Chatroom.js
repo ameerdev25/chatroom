@@ -32,19 +32,35 @@ function Chatroom() {
   const connectToRoom = (socket) => {
     if (!location.state) {
       // User join from link, so there is no location username passed
-      let newUsername = prompt("Key in username");
-      if(newUsername === "") {
-        newUsername = prompt("Username cannot be empty!");
-      } else if (newUsername) {
-        socket.emit("join room", {username: newUsername, roomid: id});
-        setUsername(newUsername);
-      } else {
-        navigate('/', {replace: false});
-      }
+      socket.emit("roomCheck", {roomid:id}, res => {
+        if (res.status === 'success') {
+          let newUsername = prompt("Key in username");
+          if(newUsername === "") {
+            newUsername = prompt("Username cannot be empty!");
+          } else if (newUsername) {
+            socket.emit("join room", {username: newUsername, roomid: id});
+            setUsername(newUsername);
+          } else {
+            navigate('/', {replace: false});
+          }            
+        } else {
+          alert("Room not exist");
+          navigate('/', {replace: false});
+        }
+      });      
     } else {   
       // User create the room   
       setUsername(location.state.username);
-      socket.emit("join room", {username: location.state.username, roomid: id});
+      console.log(location.state.username);
+      socket.emit("createRoom", {roomid:id, username:location.state.username});
+      socket.emit("roomCheck", {roomid:id}, res => {
+        if (res.status === 'success') {
+          socket.emit("join room", {username: location.state.username, roomid: id});
+        } else {
+          alert("Room not exist");
+          navigate('/', {replace: false});
+        }
+      });      
     }
        
   }
