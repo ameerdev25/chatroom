@@ -2,9 +2,8 @@ var app = require("express")();
 var http = require("http").createServer(app);
 var io = require("socket.io")(http, {
     cors: {
-        origin: ["http://localhost:3000", "http://192.168.1.103:3000", "http://192.168.1.107:3000"],
-        methods: ["GET", "POST"],
-        credentials: true
+        origin: "*",
+        methods: ["GET", "POST"]
       }
 });
 

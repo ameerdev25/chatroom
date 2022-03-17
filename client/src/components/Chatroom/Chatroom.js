@@ -4,6 +4,7 @@ import { io } from "socket.io-client";
 import ChatBubble from '../ChatBubble/ChatBubble';
 import { MdSend } from 'react-icons/md';
 import { BsEmojiSmileFill } from 'react-icons/bs'
+import { FiUserPlus } from 'react-icons/fi'
 import EmojiPicker from 'emoji-picker-react';
 import * as CONSTANTS from '../../utility/Constants';
 
@@ -17,6 +18,7 @@ function Chatroom() {
   const [message, setMessage] = useState("");
   const [chatData, setChatData] = useState([]);
   const [emojiPickerShow, setEmojiPickerShow] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   const { id } = useParams();
 
@@ -111,9 +113,17 @@ function Chatroom() {
     setMessage(message + emojiObject.emoji);
   };
 
+  const inviteLink = () => {
+    if (isInviteModalOpen) {
+      setIsInviteModalOpen(false);
+    } else {
+      setIsInviteModalOpen(true);
+    }
+  }
+
   return(
     <div className='flex flex-col h-full items-center justify-center'>
-        <div className='flex flex-col bg-purple-800 h-full w-full p-3'>
+        <div className='flex flex-col bg-purple-800 h-full w-full p-3'>            
             <div className='flex flex-col bg-white rounded-lg w-full grow p-1 overflow-auto'>
                 {chatData.map((chat, index) => {
                     return <ChatBubble key={index} type={chat.type} sender={chat.username === username ? 'self':'others'} username={chat.username} message={chat.message} time={chat.time}/> 
@@ -122,12 +132,22 @@ function Chatroom() {
             </div>
             <form className='flex mt-3' onSubmit={sendMessage}>
                 <input type='text' className='text-xl h-10 rounded-lg pl-1 grow' value={message} onChange={e => setMessage(e.target.value)} placeholder='Message...'/>
+                <button type='button' onClick={inviteLink} className='bg-white border text-purple-800 text-2xl rounded-lg font-bold ml-3 py-1 px-4 hover:bg-purple-800 hover:text-white'>
+                    <FiUserPlus />
+                </button>
                 <button type='button' onClick={emojiPicker} className='bg-white border text-yellow-500 text-2xl rounded-lg font-bold ml-3 py-1 px-4 hover:bg-purple-800 hover:text-white hidden xl:inline-block'><BsEmojiSmileFill /></button>
                 <button type='submit' className='bg-white border text-purple-800 text-2xl rounded-lg font-bold ml-3 py-1 px-4 hover:bg-purple-800 hover:text-white'>
                     <MdSend />
                 </button>
             </form>
             {emojiPickerShow ? <EmojiPicker onEmojiClick={onEmojiClick} pickerStyle={{alignSelf: 'end', marginTop: '0.75rem', width: '100%'}}/> : ""}
+        </div>
+
+        <div className={'absolute bg-purple-800 p-5 rounded-lg text-white xl:text-2xl lg:text-xl md:text-base sm:text-sm ' + (isInviteModalOpen ? '' : 'hidden')}>
+          <p>Share the following link: </p>
+          <div className='bg-white h-auto w-auto text-black p-1 overflow-hidden'>
+            http://localhost:3000/chatroom/{id}
+          </div>
         </div>        
     </div>
   );
