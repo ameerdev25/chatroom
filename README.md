@@ -1,6 +1,8 @@
 # chatroom-v2
- Chatting platform based on NodeJs and ReactJs. 
- Connect user based on room name input using Socket.io
+ Chatting platform based on NodeJs and ReactJs with the help of socket.io. 
+ 
+ ## Live Demo
+ https://chatroom-my.herokuapp.com
  
 ## Framework/Library
 * React
@@ -15,15 +17,15 @@
 
 > Main page
 
-<img width="1246" alt="chatRoom_main" src="https://user-images.githubusercontent.com/55751449/151836499-dee99d6f-2efa-40f9-8170-614983b2844a.png">
+<img width="1280" alt="chatRoom_main" src="https://user-images.githubusercontent.com/55751449/158792617-34848e85-7dc6-4131-bd23-62d6351e8b76.png">
 
 > Chat room page
 
-<img width="1280" alt="chatRoom_chatroom" src="https://user-images.githubusercontent.com/55751449/151836586-6f2af6cf-b130-44a6-b1bc-2df826ed02c6.png">
+<img width="1280" alt="chatRoom_chatroom" src="https://user-images.githubusercontent.com/55751449/158792675-f314fc29-a78d-41c3-976c-41ee14a4a3fc.png">
 
-> Chat room on mobile device (Responsive)
+> Invite link
 
-<img width="146" alt="chatRoom_mobile" src="https://user-images.githubusercontent.com/55751449/151836661-c5b0c444-732e-4992-bcf2-05c8ed901ea6.png">
+<img width="1049" alt="chatroom_invite" src="https://user-images.githubusercontent.com/55751449/158792761-17d7e74a-3ca8-4c91-8e73-c4d383006365.png">
 
 > Emoji feature
 
