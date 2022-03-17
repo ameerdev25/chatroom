@@ -130,13 +130,13 @@ function Chatroom() {
                 })} 
                 <div ref={scrollPoint}></div>
             </div>
-            <form className='flex mt-3' onSubmit={sendMessage}>
-                <input type='text' className='text-xl h-10 rounded-lg pl-1 grow' value={message} onChange={e => setMessage(e.target.value)} placeholder='Message...'/>
-                <button type='button' onClick={inviteLink} className='bg-white border text-purple-800 text-2xl rounded-lg font-bold ml-3 py-1 px-4 hover:bg-purple-800 hover:text-white'>
+            <form className='flex mt-3 space-x-1' onSubmit={sendMessage}>
+                <input type='text' className='text-xl h-6 sm:h-8 rounded-lg pl-1 grow' value={message} onChange={e => setMessage(e.target.value)} placeholder='Message...'/>
+                <button type='button' onClick={inviteLink} className='bg-white border text-purple-800 text-sm rounded-lg font-bold py-1 px-2 hover:bg-purple-800 hover:text-white'>
                     <FiUserPlus />
                 </button>
-                <button type='button' onClick={emojiPicker} className='bg-white border text-yellow-500 text-2xl rounded-lg font-bold ml-3 py-1 px-4 hover:bg-purple-800 hover:text-white hidden xl:inline-block'><BsEmojiSmileFill /></button>
-                <button type='submit' className='bg-white border text-purple-800 text-2xl rounded-lg font-bold ml-3 py-1 px-4 hover:bg-purple-800 hover:text-white'>
+                <button type='button' onClick={emojiPicker} className='bg-white border text-yellow-500 text-sm rounded-lg font-bold py-1 px-2 hover:bg-purple-800 hover:text-white hidden xl:inline-block'><BsEmojiSmileFill /></button>
+                <button type='submit' className='bg-white border text-purple-800 text-sm rounded-lg font-bold py-1 px-2 hover:bg-purple-800 hover:text-white'>
                     <MdSend />
                 </button>
             </form>
